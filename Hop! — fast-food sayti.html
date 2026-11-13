@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="uz"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hop! — tez va mazali burgerlar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;700;800&display=swap">
+<style>:root{--sun:#ffd23f;--tomato:#f0432c;--ink:#1d1f4a;--pickle:#2fa56a;--white:#fff;color-scheme:light;box-sizing:border-box}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--sun);color:var(--ink);font:700 17px/1.5 'Nunito',system-ui,sans-serif;padding-bottom:env(safe-area-inset-bottom,0px)}
+h1,h2,h3,.logo,.btn{font-family:'Lilita One','Nunito',sans-serif;font-weight:400}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px 40px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.top{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;padding-top:calc(14px + env(safe-area-inset-top,0px));background:var(--tomato);border-bottom:4px solid var(--ink)}
+.logo{font-size:28px;color:var(--white);text-decoration:none;letter-spacing:.01em}
+.logo span{color:var(--sun);margin-left:4px}
+.cart-btn{background:var(--white);border:3px solid var(--ink);border-radius:99px;padding:6px 16px;box-shadow:3px 3px 0 var(--ink);font-weight:800}
+.cart-btn b{display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:99px;background:var(--ink);color:var(--white);margin-left:6px;font-size:14px}
+.hero{display:grid;grid-template-columns:1.4fr 1fr;align-items:center;gap:20px;padding:44px 0 36px}
+.hero h1{font-size:clamp(38px,7vw,72px);line-height:1.02;margin:0 0 16px}
+.hero p{max-width:40ch;margin:0 0 24px}
+.hero-art{width:100%;max-width:340px;justify-self:center;transform:rotate(-8deg)}
+.btn{display:inline-block;background:var(--tomato);color:var(--white);border:3px solid var(--ink);border-radius:14px;padding:12px 24px;font-size:19px;box-shadow:4px 4px 0 var(--ink);text-decoration:none}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.small{padding:7px 14px;font-size:16px;box-shadow:3px 3px 0 var(--ink)}
+.btn.wide{width:100%;text-align:center}
+.sec{font-size:40px;margin:12px 0 14px}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.tabs button{background:var(--white);border:3px solid var(--ink);border-radius:99px;padding:7px 18px;font-weight:800}
+.tabs button[aria-pressed=true]{background:var(--ink);color:var(--sun)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.item{background:var(--white);border:3px solid var(--ink);border-radius:20px;padding:20px;box-shadow:6px 6px 0 var(--ink);display:flex;flex-direction:column}
+.pic{display:grid;place-items:center;height:150px;border:3px solid var(--ink);border-radius:14px;margin-bottom:12px;background:#ffd9a8}
+.pic img{height:128px;width:auto;max-width:100%}
+.pic[data-cat=Burgerlar]{background:#ffb8a8}.pic[data-cat=Gazaklar]{background:#c9f0d8}.pic[data-cat=Ichimliklar]{background:#bfe3ff}.pic[data-cat=Shirinliklar]{background:#ffc9e6}
+.item h3{font-size:24px;margin:0 0 4px}
+.item p{margin:0 0 16px;font-weight:500;color:#4a4d7a;flex:1}
+.item .row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:56px;padding:24px;background:var(--ink);color:var(--white);border-radius:20px}
+.overlay{position:fixed;inset:0;background:rgba(29,31,74,.55);opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
+.overlay.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--white);border-left:4px solid var(--ink);z-index:11;transform:translateX(105%);transition:transform .25s;display:flex;flex-direction:column;padding:18px;padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto}
+.drawer.open{transform:none}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.drawer-head h2{margin:0;font-size:32px}
+.x{background:var(--sun);border:3px solid var(--ink);border-radius:99px;padding:4px 14px}
+.empty{color:#4a4d7a;font-weight:500}
+.lines{list-style:none;margin:0;padding:0;flex:1}
+.lines li{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:2px dashed #ccd}
+
+.nm{flex:1;display:flex;flex-direction:column}
+.nm small{font-weight:500;color:#4a4d7a}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:34px;height:34px;border-radius:50%;border:3px solid var(--ink);background:var(--sun);font-size:20px;line-height:1;padding:0}
+.qty span{min-width:20px;text-align:center}
+.total{display:flex;justify-content:space-between;align-items:center;font-size:20px;padding:16px 0}
+.order{display:flex;flex-direction:column;gap:14px}
+.order label{display:flex;flex-direction:column;gap:6px;font-weight:800}
+.order input,.order textarea{border:3px solid var(--ink);border-radius:12px;padding:10px 12px;font:600 17px 'Nunito',sans-serif;resize:vertical}
+.link{background:none;border:0;text-decoration:underline;padding:6px;align-self:center}
+.done{text-align:center;padding:30px 6px}
+.done .big{width:140px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg button{border:3px solid var(--ink);border-radius:12px;background:var(--white);padding:9px;font-weight:800}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--sun)}
+.done h3{font-size:30px;margin:8px 0}
+.done p{font-weight:500}
+@media(max-width:720px){.hero{grid-template-columns:1fr;padding-top:28px}.hero-art{order:-1;max-width:200px;justify-self:start}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.lines .ic{width:56px;height:40px;object-fit:contain;background:var(--sun);border:2px solid var(--ink);border-radius:10px}
+</style></head><body><div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<script type="text/babel">
+const {useState,useMemo,useEffect,useRef}=React;
+const categories = ['Hammasi', 'Burgerlar', 'Gazaklar', 'Ichimliklar', 'Shirinliklar']
+
+// image: public/images/ papkasidagi fayl. Haqiqiy rasm qo‘ymoqchi bo‘lsangiz, shu papkaga
+// .jpg yoki .png tashlab, quyidagi nomni o‘zgartiring (masalan: '/images/burger.jpg').
+const menu = [
+  { id: 1, cat: 'Burgerlar', name: 'Klassik burger', desc: 'Mol go‘shti, bodring, sous', price: 32000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNMzQgNjRRMzQgMjAgMTAwIDIwUTE2NiAyMCAxNjYgNjRaIiBmaWxsPSIjZjNhNjRhIi8+PGNpcmNsZSBjeD0iNzYiIGN5PSIzOCIgcj0iMi41IiBmaWxsPSIjZmZmM2M0Ii8+PGNpcmNsZSBjeD0iMTAwIiBjeT0iMzIiIHI9IjIuNSIgZmlsbD0iI2ZmZjNjNCIvPjxjaXJjbGUgY3g9IjEyNCIgY3k9IjM4IiByPSIyLjUiIGZpbGw9IiNmZmYzYzQiLz48cGF0aCBkPSJNMjggNjZoMTQ0cTAgMTAtMTAgMTBsLTEyLTYtMTIgNi0xMi02LTEyIDYtMTItNi0xMiA2LTEyLTYtMTIgNnEtMTAgMC0xMC0xMHoiIGZpbGw9IiMyZmE1NmEiLz48cmVjdCB4PSIzMCIgeT0iNzYiIHdpZHRoPSIxNDAiIGhlaWdodD0iMjQiIHJ4PSIxMiIgZmlsbD0iIzdhM2IxZCIvPjxyZWN0IHg9IjM2IiB5PSIxMDQiIHdpZHRoPSIxMjgiIGhlaWdodD0iMjAiIHJ4PSIxMCIgZmlsbD0iI2YzYTY0YSIvPjwvZz48L3N2Zz4=' },
+  { id: 2, cat: 'Burgerlar', name: 'Cheeseburger', desc: 'Ikki qavat pishloq va karamel piyoz', price: 38000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNMzQgNjRRMzQgMjAgMTAwIDIwUTE2NiAyMCAxNjYgNjRaIiBmaWxsPSIjZjNhNjRhIi8+PGNpcmNsZSBjeD0iNzYiIGN5PSIzOCIgcj0iMi41IiBmaWxsPSIjZmZmM2M0Ii8+PGNpcmNsZSBjeD0iMTAwIiBjeT0iMzIiIHI9IjIuNSIgZmlsbD0iI2ZmZjNjNCIvPjxjaXJjbGUgY3g9IjEyNCIgY3k9IjM4IiByPSIyLjUiIGZpbGw9IiNmZmYzYzQiLz48cmVjdCB4PSIzMCIgeT0iNjQiIHdpZHRoPSIxNDAiIGhlaWdodD0iMTgiIHJ4PSI5IiBmaWxsPSIjN2EzYjFkIi8+PHBhdGggZD0iTTMyIDgyaDEzNmwtMTggMjItMTQtMTItMTQgMTItMTQtMTItMTQgMTItMTQtMTItMTQgMTJ6IiBmaWxsPSIjZmZkMjNmIi8+PHJlY3QgeD0iMzAiIHk9IjkwIiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0IiByeD0iNyIgZmlsbD0iIzdhM2IxZCIvPjxyZWN0IHg9IjM2IiB5PSIxMDQiIHdpZHRoPSIxMjgiIGhlaWdodD0iMjAiIHJ4PSIxMCIgZmlsbD0iI2YzYTY0YSIvPjwvZz48L3N2Zz4=' },
+  { id: 3, cat: 'Burgerlar', name: 'Tovuq burger', desc: 'Qarsildoq tovuq filesi va salat', price: 30000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNMzQgNjRRMzQgMjAgMTAwIDIwUTE2NiAyMCAxNjYgNjRaIiBmaWxsPSIjZjNhNjRhIi8+PGNpcmNsZSBjeD0iNzYiIGN5PSIzOCIgcj0iMi41IiBmaWxsPSIjZmZmM2M0Ii8+PGNpcmNsZSBjeD0iMTAwIiBjeT0iMzIiIHI9IjIuNSIgZmlsbD0iI2ZmZjNjNCIvPjxjaXJjbGUgY3g9IjEyNCIgY3k9IjM4IiByPSIyLjUiIGZpbGw9IiNmZmYzYzQiLz48Y2lyY2xlIGN4PSI3MCIgY3k9Ijc0IiByPSIxMCIgZmlsbD0iI2YwNDMyYyIvPjxjaXJjbGUgY3g9IjEzMCIgY3k9Ijc0IiByPSIxMCIgZmlsbD0iI2YwNDMyYyIvPjxwYXRoIGQ9Ik0yOCA2NmgxNDRxMCAxMC0xMCAxMGgtMTI0cS0xMCAwLTEwLTEweiIgZmlsbD0iIzliZTA4ZiIvPjxyZWN0IHg9IjMwIiB5PSI3NiIgd2lkdGg9IjE0MCIgaGVpZ2h0PSIyNiIgcng9IjEzIiBmaWxsPSIjZThhMzNkIi8+PGNpcmNsZSBjeD0iNjAiIGN5PSI4OSIgcj0iMiIgZmlsbD0iI2E4NjQxYyIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9Ijg2IiByPSIyIiBmaWxsPSIjYTg2NDFjIi8+PGNpcmNsZSBjeD0iMTQwIiBjeT0iOTAiIHI9IjIiIGZpbGw9IiNhODY0MWMiLz48cmVjdCB4PSIzNiIgeT0iMTA0IiB3aWR0aD0iMTI4IiBoZWlnaHQ9IjIwIiByeD0iMTAiIGZpbGw9IiNmM2E2NGEiLz48L2c+PC9zdmc+' },
+  { id: 4, cat: 'Gazaklar', name: 'Kartoshka fri', desc: 'Issiq va tuzli, katta porsiya', price: 15000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cmVjdCB4PSI2MCIgeT0iMjIiIHdpZHRoPSIxNCIgaGVpZ2h0PSI2MCIgcng9IjUiIGZpbGw9IiNmZmQyM2YiIHRyYW5zZm9ybT0icm90YXRlKC0xMiA2NyA1MikiLz48cmVjdCB4PSI4MiIgeT0iMTQiIHdpZHRoPSIxNCIgaGVpZ2h0PSI2NiIgcng9IjUiIGZpbGw9IiNmZmMyMWEiLz48cmVjdCB4PSIxMDQiIHk9IjE4IiB3aWR0aD0iMTQiIGhlaWdodD0iNjIiIHJ4PSI1IiBmaWxsPSIjZmZkMjNmIi8+PHJlY3QgeD0iMTI0IiB5PSIyNCIgd2lkdGg9IjE0IiBoZWlnaHQ9IjU4IiByeD0iNSIgZmlsbD0iI2ZmYzIxYSIgdHJhbnNmb3JtPSJyb3RhdGUoMTIgMTMxIDUzKSIvPjxwYXRoIGQ9Ik01MiA2Nmg5NmwtMTAgNjJINjJ6IiBmaWxsPSIjZjA0MzJjIi8+PHBhdGggZD0iTTgwIDg0aDQwIiBzdHJva2U9IiNmZmYiLz48L2c+PC9zdmc+' },
+  { id: 5, cat: 'Gazaklar', name: 'Hot-dog', desc: 'Yumshoq non, sosiska, gorchitsa', price: 18000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cmVjdCB4PSIyMiIgeT0iNzAiIHdpZHRoPSIxNTYiIGhlaWdodD0iNDIiIHJ4PSIyMSIgZmlsbD0iI2YzYTY0YSIvPjxyZWN0IHg9IjE0IiB5PSI1MiIgd2lkdGg9IjE3MiIgaGVpZ2h0PSIyNiIgcng9IjEzIiBmaWxsPSIjZDk1NzRhIi8+PHBhdGggZD0iTTMwIDY0cTEwLTEwIDIwIDB0MjAgMCAyMCAwIDIwIDAgMjAgMCAyMCAwIDIwIDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZDIzZiIgc3Ryb2tlLXdpZHRoPSI2Ii8+PC9nPjwvc3ZnPg==' },
+  { id: 6, cat: 'Gazaklar', name: 'Lavash', desc: 'Tovuq, sabzavot va maxsus sous', price: 27000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNNTIgMzZsNjYtMTYgNDIgNDYtMzIgNTQtNjYgOHoiIGZpbGw9IiNlOGMxN2EiLz48cGF0aCBkPSJNNTIgMzZsMTA4IDMwIiBmaWxsPSJub25lIi8+PGNpcmNsZSBjeD0iNjQiIGN5PSI0OCIgcj0iMTAiIGZpbGw9IiNmMDQzMmMiLz48Y2lyY2xlIGN4PSI4NCIgY3k9IjQwIiByPSI5IiBmaWxsPSIjOWJlMDhmIi8+PGNpcmNsZSBjeD0iMTAyIiBjeT0iMzYiIHI9IjgiIGZpbGw9IiNmZmQyM2YiLz48cGF0aCBkPSJNNTIgMzZxLTE4IDQwIDEwIDgwIiBmaWxsPSIjZDlhODVhIi8+PC9nPjwvc3ZnPg==' },
+  { id: 7, cat: 'Gazaklar', name: 'Nagetslar (8 ta)', desc: 'Tovuq nagetslari, sous bilan', price: 22000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNMjQgNzRxLTQtMjQgMjItMjYgMjQtMiAyNiAyMiAyIDIyLTIyIDI2LTIyIDItMjYtMjJ6IiBmaWxsPSIjZThhMzNkIi8+PHBhdGggZD0iTTc4IDUwcS02LTIyIDE4LTI2IDI0LTQgMjggMTggNCAyMi0xOCAyNi0yNCA0LTI4LTE4eiIgZmlsbD0iI2YwYjQ0ZiIvPjxwYXRoIGQ9Ik02MiA5NnEtNC0xOCAxNi0yMiAyMi0yIDI2IDE2IDIgMjAtMTggMjItMjAgMi0yNC0xNnoiIGZpbGw9IiNlOGEzM2QiLz48cmVjdCB4PSIxMzIiIHk9IjY0IiB3aWR0aD0iNDYiIGhlaWdodD0iNDQiIHJ4PSI4IiBmaWxsPSIjZjA0MzJjIi8+PHBhdGggZD0iTTEzMiA3OGg0NiIgLz48L2c+PC9zdmc+' },
+  { id: 8, cat: 'Ichimliklar', name: 'Kola 0.5 l', desc: 'Muzdek', price: 9000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNNjIgNDBoNzZsLTEwIDg4SDcyeiIgZmlsbD0iI2YwNDMyYyIvPjxwYXRoIGQ9Ik02NiA3MGg2OGwtMyAzMEg2OXoiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSI1NiIgeT0iMzAiIHdpZHRoPSI4OCIgaGVpZ2h0PSIxNCIgcng9IjciIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNMTA0IDMwbDE0LTIyaDIwIiBmaWxsPSJub25lIi8+PC9nPjwvc3ZnPg==' },
+  { id: 9, cat: 'Ichimliklar', name: 'Limonli choy', desc: 'Sovuq, muz bilan', price: 8000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNNjQgMjRoNzJsLTggMTAwSDcyeiIgZmlsbD0iI2U4YTMzZCIgZmlsbC1vcGFjaXR5PSIuOSIvPjxwYXRoIGQ9Ik02OCAyNGg2NCIgLz48cmVjdCB4PSI4MiIgeT0iNTAiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgcng9IjUiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iLjgiIHRyYW5zZm9ybT0icm90YXRlKDEyIDkzIDYxKSIvPjxyZWN0IHg9IjEwOCIgeT0iNzYiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgcng9IjUiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iLjgiIHRyYW5zZm9ybT0icm90YXRlKC0xMCAxMTggODYpIi8+PGNpcmNsZSBjeD0iMTQ4IiBjeT0iNDIiIHI9IjIyIiBmaWxsPSIjZmZkMjNmIi8+PHBhdGggZD0iTTE0OCAyMHY0NE0xMjYgNDJoNDQiIHN0cm9rZS13aWR0aD0iMyIvPjwvZz48L3N2Zz4=' },
+  { id: 10, cat: 'Ichimliklar', name: 'Sutli kokteyl', desc: 'Qulupnay ta’mi, qaymoq bilan', price: 16000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNNjYgNDRoNjhsLTggODJINzR6IiBmaWxsPSIjZmZiOGQ0Ii8+PHBhdGggZD0iTTYwIDQ0cTAtMjYgNDAtMjZ0NDAgMjZ6IiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iMTAwIiBjeT0iMTQiIHI9IjkiIGZpbGw9IiNmMDQzMmMiLz48cGF0aCBkPSJNMTE4IDQ0bDE0LTM0IiBmaWxsPSJub25lIi8+PC9nPjwvc3ZnPg==' },
+  { id: 11, cat: 'Ichimliklar', name: 'Limonad', desc: 'Yangi limon va yalpiz', price: 12000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNNjQgMjRoNzJsLTggMTAwSDcyeiIgZmlsbD0iI2Q2ZjI3YSIgZmlsbC1vcGFjaXR5PSIuOTUiLz48cGF0aCBkPSJNNjYgNTZoNjgiIHN0cm9rZS13aWR0aD0iMyIvPjxjaXJjbGUgY3g9IjEzNiIgY3k9IjMwIiByPSIyMiIgZmlsbD0iI2ZmZDIzZiIvPjxwYXRoIGQ9Ik0xMzYgOHY0NE0xMTQgMzBoNDQiIHN0cm9rZS13aWR0aD0iMyIvPjxwYXRoIGQ9Ik04NCAxNHEtNC0xMiA4LTE0IDQgMTAtOCAxNHpNMTAwIDE2cTItMTQgMTQtMTItMiAxMi0xNCAxMnoiIGZpbGw9IiMyZmE1NmEiLz48L2c+PC9zdmc+' },
+  { id: 12, cat: 'Ichimliklar', name: 'Muzli kofe', desc: 'Sut va muz bilan', price: 18000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNNjQgMjRoNzJsLTggMTAwSDcyeiIgZmlsbD0iI2I5N2E0YSIvPjxwYXRoIGQ9Ik02NiAyNGg2OGwtMiAyNkg2OHoiIGZpbGw9IiNmZmYzZTAiLz48cmVjdCB4PSI4MiIgeT0iNjQiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgcng9IjUiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iLjciIHRyYW5zZm9ybT0icm90YXRlKDEwIDkyIDc0KSIvPjxwYXRoIGQ9Ik0xMTQgMjhsMTYtMjQiIGZpbGw9Im5vbmUiLz48L2c+PC9zdmc+' },
+  { id: 13, cat: 'Shirinliklar', name: 'Muzqaymoq', desc: 'Vanil va qulupnay, vafli stakanda', price: 12000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNNzAgNzBoNjBsLTMwIDYyeiIgZmlsbD0iI2U4YTMzZCIvPjxwYXRoIGQ9Ik04MiA4NGwzNiAwTTkwIDEwMGwyMCAwIiBzdHJva2Utd2lkdGg9IjMiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI1NiIgcj0iMzAiIGZpbGw9IiNmZmI4ZDQiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIzNCIgcj0iMjQiIGZpbGw9IiNmZmYzZTAiLz48Y2lyY2xlIGN4PSIxMDQiIGN5PSIxMiIgcj0iNiIgZmlsbD0iI2YwNDMyYyIvPjwvZz48L3N2Zz4=' },
+  { id: 14, cat: 'Shirinliklar', name: 'Ponchik', desc: 'Pushti glazur va sepma', price: 10000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSI3MiIgcj0iNTIiIGZpbGw9IiNlOGEzM2QiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI2NiIgcj0iNTIiIGZpbGw9IiNmZjhmYzIiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI2NiIgcj0iMTYiIGZpbGw9IiNmZmQyM2YiIHN0cm9rZT0iIzFkMWY0YSIvPjxwYXRoIGQ9Ik02OCA0NGw4IDRNMTI0IDQwbC02IDhNMTMyIDc2bC04LTJNNzAgODZsOC00TTEwNCAxMDB2LTgiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI1Ii8+PC9nPjwvc3ZnPg==' },
+  { id: 15, cat: 'Shirinliklar', name: 'Cheesecake', desc: 'Yumshoq, qulupnay bilan', price: 24000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNMjQgMTEyTDYwIDQ0aDExMmwtOCA2OHoiIGZpbGw9IiNmZmYwYzQiLz48cGF0aCBkPSJNNjAgNDRoMTEybC0zIDIySDU2eiIgZmlsbD0iI2Y0ZDc4YSIvPjxwYXRoIGQ9Ik0yNCAxMTJoMTQwbC00IDE0SDI4eiIgZmlsbD0iIzdhM2IxZCIvPjxjaXJjbGUgY3g9IjEyOCIgY3k9IjM0IiByPSIxNCIgZmlsbD0iI2YwNDMyYyIvPjxwYXRoIGQ9Ik0xMjggMjBsNC04IiAvPjwvZz48L3N2Zz4=' },
+  { id: 16, cat: 'Shirinliklar', name: 'Brauni', desc: 'Shokoladli, qaymoq bilan', price: 20000, image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cmVjdCB4PSIzNCIgeT0iODIiIHdpZHRoPSIxMzIiIGhlaWdodD0iNDIiIHJ4PSI2IiBmaWxsPSIjNWEyYjE0Ii8+PHJlY3QgeD0iNDIiIHk9IjQyIiB3aWR0aD0iMTE2IiBoZWlnaHQ9IjQyIiByeD0iNiIgZmlsbD0iIzZiMzQxOCIvPjxwYXRoIGQ9Ik00MiA1NHEyMCAxNCA0MCAwdDQwIDAgMzYgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmM2UwIiBzdHJva2Utd2lkdGg9IjYiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIzMCIgcj0iMTQiIGZpbGw9IiNmZmYzZTAiLz48Y2lyY2xlIGN4PSIxMDQiIGN5PSIyMiIgcj0iNSIgZmlsbD0iI2YwNDMyYyIvPjwvZz48L3N2Zz4=' },
+]
+
+const som = (n) => n.toLocaleString('ru-RU').replace(/\u00a0/g, ' ') + ' so‘m'
+function Header({ count, onCart }) {
+  return (
+    <header className="top">
+      <a className="logo" href="#">Hop<span>!</span></a>
+      <button className="cart-btn" onClick={onCart} aria-label={`Savat, ${count} ta mahsulot`}>
+        Savat <b>{count}</b>
+      </button>
+    </header>
+  )
+}
+
+function Hero() {
+  return (
+    <section className="hero">
+      <div>
+        <h1>Hop! Issiq burger, <br />tez va mazali.</h1>
+        <p>Restoranda stol raqamini yozing yoki uyga buyurtma bering. Har kuni 10:00 dan 02:00 gacha.</p>
+        <a className="btn" href="#menyu">Menyuni ko‘rish</a>
+      </div>
+      <img className="hero-art" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNMzQgNjRRMzQgMjAgMTAwIDIwUTE2NiAyMCAxNjYgNjRaIiBmaWxsPSIjZjNhNjRhIi8+PGNpcmNsZSBjeD0iNzYiIGN5PSIzOCIgcj0iMi41IiBmaWxsPSIjZmZmM2M0Ii8+PGNpcmNsZSBjeD0iMTAwIiBjeT0iMzIiIHI9IjIuNSIgZmlsbD0iI2ZmZjNjNCIvPjxjaXJjbGUgY3g9IjEyNCIgY3k9IjM4IiByPSIyLjUiIGZpbGw9IiNmZmYzYzQiLz48cGF0aCBkPSJNMjggNjZoMTQ0cTAgMTAtMTAgMTBsLTEyLTYtMTIgNi0xMi02LTEyIDYtMTItNi0xMiA2LTEyLTYtMTIgNnEtMTAgMC0xMC0xMHoiIGZpbGw9IiMyZmE1NmEiLz48cmVjdCB4PSIzMCIgeT0iNzYiIHdpZHRoPSIxNDAiIGhlaWdodD0iMjQiIHJ4PSIxMiIgZmlsbD0iIzdhM2IxZCIvPjxyZWN0IHg9IjM2IiB5PSIxMDQiIHdpZHRoPSIxMjgiIGhlaWdodD0iMjAiIHJ4PSIxMCIgZmlsbD0iI2YzYTY0YSIvPjwvZz48L3N2Zz4=" alt="" />
+    </section>
+  )
+}
+
+function CategoryTabs({ categories, current, onChange }) {
+  return (
+    <div className="tabs" role="group" aria-label="Kategoriyalar">
+      {categories.map((c) => (
+        <button key={c} aria-pressed={c === current} onClick={() => onChange(c)}>{c}</button>
+      ))}
+    </div>
+  )
+}
+
+
+function MenuItem({ item, qty, onAdd }) {
+  return (
+    <article className="item">
+      <div className="pic" data-cat={item.cat}>
+        <img src={item.image} alt={item.name} loading="lazy" />
+      </div>
+      <h3>{item.name}</h3>
+      <p>{item.desc}</p>
+      <div className="row">
+        <strong>{som(item.price)}</strong>
+        <button className="btn small" onClick={() => onAdd(item)}>
+          {qty ? `Qo‘shish (${qty})` : 'Qo‘shish'}
+        </button>
+      </div>
+    </article>
+  )
+}
+
+
+function OrderForm({ total, onBack, onDone }) {
+  const [type, setType] = useState('dine') // dine = restoranda, delivery = yetkazib berish
+  const [f, setF] = useState({ name: '', phone: '', table: '', address: '' })
+  const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
+
+  const submit = (e) => {
+    e.preventDefault()
+    // Bu yerga o‘z API so‘rovingizni qo‘shing: fetch('/api/orders', { method: 'POST', body: JSON.stringify({ type, ...f }) })
+    onDone(type)
+  }
+
+  return (
+    <form className="order" onSubmit={submit}>
+      <div className="seg" role="group" aria-label="Buyurtma turi">
+        <button type="button" aria-pressed={type === 'dine'} onClick={() => setType('dine')}>Restoranda</button>
+        <button type="button" aria-pressed={type === 'delivery'} onClick={() => setType('delivery')}>Yetkazib berish</button>
+      </div>
+
+      <label>Ismingiz
+        <input required value={f.name} onChange={set('name')} autoComplete="name" />
+      </label>
+
+      {type === 'dine' ? (
+        <label>Stol raqami
+          <input required inputMode="numeric" pattern="[0-9]{1,3}" placeholder="Masalan: 7"
+            value={f.table} onChange={set('table')} />
+        </label>
+      ) : (
+        <>
+          <label>Telefon raqam
+            <input required type="tel" pattern="[0-9+ ()-]{9,}" placeholder="+998 90 123 45 67"
+              value={f.phone} onChange={set('phone')} autoComplete="tel" />
+          </label>
+          <label>Yetkazish manzili
+            <textarea required rows="3" value={f.address} onChange={set('address')} />
+          </label>
+        </>
+      )}
+
+      <div className="total"><span>To‘lov</span><strong>{som(total)}</strong></div>
+      <button className="btn wide">Buyurtma berish</button>
+      <button type="button" className="link" onClick={onBack}>Savatga qaytish</button>
+    </form>
+  )
+}
+
+
+function Cart({ open, items, onClose, onChangeQty, onClear }) {
+  const [step, setStep] = useState('cart') // cart | form | done
+  const [kind, setKind] = useState('dine')
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0)
+
+  const close = () => { onClose(); if (step === 'done') setStep('cart') }
+  const placed = (type) => { setKind(type); onClear(); setStep('done') }
+
+  return (
+    <>
+      <div className={'overlay' + (open ? ' show' : '')} onClick={close} />
+      <aside className={'drawer' + (open ? ' open' : '')} aria-hidden={!open} aria-label="Savat">
+        <div className="drawer-head">
+          <h2>Savat</h2>
+          <button className="x" onClick={close} aria-label="Yopish">Yopish</button>
+        </div>
+
+        {step === 'done' ? (
+          <div className="done">
+            <img className="big" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMTQwIj48ZyBzdHJva2U9IiMxZDFmNGEiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cGF0aCBkPSJNMzQgNjRRMzQgMjAgMTAwIDIwUTE2NiAyMCAxNjYgNjRaIiBmaWxsPSIjZjNhNjRhIi8+PGNpcmNsZSBjeD0iNzYiIGN5PSIzOCIgcj0iMi41IiBmaWxsPSIjZmZmM2M0Ii8+PGNpcmNsZSBjeD0iMTAwIiBjeT0iMzIiIHI9IjIuNSIgZmlsbD0iI2ZmZjNjNCIvPjxjaXJjbGUgY3g9IjEyNCIgY3k9IjM4IiByPSIyLjUiIGZpbGw9IiNmZmYzYzQiLz48cGF0aCBkPSJNMjggNjZoMTQ0cTAgMTAtMTAgMTBsLTEyLTYtMTIgNi0xMi02LTEyIDYtMTItNi0xMiA2LTEyLTYtMTIgNnEtMTAgMC0xMC0xMHoiIGZpbGw9IiMyZmE1NmEiLz48cmVjdCB4PSIzMCIgeT0iNzYiIHdpZHRoPSIxNDAiIGhlaWdodD0iMjQiIHJ4PSIxMiIgZmlsbD0iIzdhM2IxZCIvPjxyZWN0IHg9IjM2IiB5PSIxMDQiIHdpZHRoPSIxMjgiIGhlaWdodD0iMjAiIHJ4PSIxMCIgZmlsbD0iI2YzYTY0YSIvPjwvZz48L3N2Zz4=" alt="" />
+            <h3>Buyurtma qabul qilindi!</h3>
+            <p>{kind === 'dine' ? 'Buyurtmangiz oshxonaga yuborildi. Stolingizga tez orada olib kelamiz.' : 'Operator tez orada telefon qiladi. Yetkazish taxminan 20 daqiqa.'}</p>
+            <button className="btn" onClick={close}>Menyuga qaytish</button>
+          </div>
+        ) : items.length === 0 ? (
+          <p className="empty">Savat bo‘sh. Menyudan biror narsa tanlang.</p>
+        ) : step === 'cart' ? (
+          <>
+            <ul className="lines">
+              {items.map((i) => (
+                <li key={i.id}>
+                  <img className="ic" src={i.image} alt="" />
+                  <div className="nm"><b>{i.name}</b><small>{som(i.price)}</small></div>
+                  <div className="qty">
+                    <button onClick={() => onChangeQty(i.id, -1)} aria-label={`${i.name}: kamaytirish`}>−</button>
+                    <span>{i.qty}</span>
+                    <button onClick={() => onChangeQty(i.id, 1)} aria-label={`${i.name}: ko‘paytirish`}>+</button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div className="total"><span>Jami</span><strong>{som(total)}</strong></div>
+            <button className="btn wide" onClick={() => setStep('form')}>Buyurtmani rasmiylashtirish</button>
+          </>
+        ) : (
+          <OrderForm total={total} onBack={() => setStep('cart')} onDone={placed} />
+        )}
+      </aside>
+    </>
+  )
+}
+
+
+function App() {
+  const [cat, setCat] = useState('Hammasi')
+  const [cart, setCart] = useState({}) // { id: qty }
+  const [open, setOpen] = useState(false)
+
+  const add = (item) => { setCart((c) => ({ ...c, [item.id]: (c[item.id] || 0) + 1 })) }
+  const change = (id, d) => setCart((c) => {
+    const q = (c[id] || 0) + d
+    const n = { ...c }
+    if (q <= 0) delete n[id]; else n[id] = q
+    return n
+  })
+
+  const items = useMemo(() => menu.filter((m) => cart[m.id]).map((m) => ({ ...m, qty: cart[m.id] })), [cart])
+  const count = items.reduce((s, i) => s + i.qty, 0)
+  const list = menu.filter((m) => cat === 'Hammasi' || m.cat === cat)
+
+  return (
+    <>
+      <Header count={count} onCart={() => setOpen(true)} />
+      <main className="wrap">
+        <Hero />
+        <section id="menyu">
+          <h2 className="sec">Menyu</h2>
+          <CategoryTabs categories={categories} current={cat} onChange={setCat} />
+          <div className="grid">
+            {list.map((m) => <MenuItem key={m.id} item={m} qty={cart[m.id]} onAdd={add} />)}
+          </div>
+        </section>
+        <footer className="foot">
+          <div><b>Hop! — manzil</b><br />Toshkent, Amir Temur ko‘chasi 12</div>
+          <div><b>Ish vaqti</b><br />Har kuni 10:00 — 02:00</div>
+          <div><b>Telefon</b><br />+998 90 000 00 00</div>
+        </footer>
+      </main>
+      <Cart open={open} items={items} onClose={() => setOpen(false)} onChangeQty={change} onClear={() => setCart({})} />
+    </>
+  )
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+</script></body></html>
